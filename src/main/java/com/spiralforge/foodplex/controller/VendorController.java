@@ -1,5 +1,8 @@
 package com.spiralforge.foodplex.controller;
 
-public class VendorController {
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+public class VendorController {
+	
 }
