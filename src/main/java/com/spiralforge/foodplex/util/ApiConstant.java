@@ -13,6 +13,8 @@ public class ApiConstant {
 	public static final String LOGIN_SUCCESS = "you are successfully logged in";
 	public static final String MOBILE_NUMBER_VALIDATION = "Enter a valid Mobile number";
 	
+	public static final String VENDOR_NOT_FOUND_EXCEPTION = "Vendor not available";
+	
 	public static final String SUCCESS = "SUCCESSFUL";
 	public static final String FAILED = "FAILED";
 
@@ -24,5 +26,6 @@ public class ApiConstant {
 	public static final Integer SUCCESS_CODE = 200;
 	public static final Integer FAILURE_CODE = 404;
 	public static final Integer NO_CONTENT_CODE = 204;
+	
 	
 }
