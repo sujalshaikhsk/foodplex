@@ -31,6 +31,6 @@ public class VendorItem {
 	private Item item;
 
 	@OneToOne
-	@JoinColumn(name = "vendor_id")
-	private Vendor vendor;
+	@JoinColumn(name = "user_id")
+	private User user;
 }
