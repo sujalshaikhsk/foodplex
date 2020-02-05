@@ -11,8 +11,10 @@ public class ApiConstant {
 
 	public static final String LOGIN_ERROR = "please enter valid username and password";
 	public static final String LOGIN_SUCCESS = "you are successfully logged in";
-	public static final String CREDIT_CARD_TYPE = "credit";
-
+	public static final String MOBILE_NUMBER_VALIDATION = "Enter a valid Mobile number";
+	
+	public static final String VENDOR_NOT_FOUND_EXCEPTION = "Vendor not available";
+	
 	public static final String SUCCESS = "SUCCESSFUL";
 	public static final String FAILED = "FAILED";
 
@@ -24,6 +26,7 @@ public class ApiConstant {
 	public static final Integer SUCCESS_CODE = 200;
 	public static final Integer FAILURE_CODE = 404;
 	public static final Integer NO_CONTENT_CODE = 204;
+
 	public static final String INVALID_ORDER = "Order data is not valid";
 	public static final String INVALID_USER = "User doesn't exist";
 	public static final String ITEM_NOT_FOUND = "Item is not selected";
