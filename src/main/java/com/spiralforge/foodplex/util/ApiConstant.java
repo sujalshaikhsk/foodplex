@@ -24,5 +24,10 @@ public class ApiConstant {
 	public static final Integer SUCCESS_CODE = 200;
 	public static final Integer FAILURE_CODE = 404;
 	public static final Integer NO_CONTENT_CODE = 204;
+	public static final String INVALID_ORDER = "Order data is not valid";
+	public static final String INVALID_USER = "User doesn't exist";
+	public static final String ITEM_NOT_FOUND = "Item is not selected";
+	public static final String INVALID_UPI = "Please enter valid upi id";
+	public static final String INVALID_ITEM = "Please order valid item only";;
 
 }

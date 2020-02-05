@@ -23,4 +23,7 @@ public class Constant {
 	public static final Integer MIN_AGE = 18;
 	public static final Double MIN_SALARY = 10000D;
 	public static final long VALID_TILL = 5;
+	public static final String CONFIRMED_STATUS = "CONFIRMED";
+	public static final String DELEVERED_STATUS = "DELEVERED";
+
 }

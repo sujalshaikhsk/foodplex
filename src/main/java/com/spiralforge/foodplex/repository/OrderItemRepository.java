@@ -3,9 +3,9 @@ package com.spiralforge.foodplex.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.spiralforge.foodplex.entity.VendorItem;
+import com.spiralforge.foodplex.entity.OrderItem;
 
 @Repository
-public interface VendorItemRepository extends JpaRepository<VendorItem, Integer>{
+public interface OrderItemRepository extends JpaRepository<OrderItem, Integer>{
 	
 }

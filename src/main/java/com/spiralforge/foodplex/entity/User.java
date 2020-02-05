@@ -23,4 +23,6 @@ public class User {
 	private String password;
 	private String role;
 	private long mobileNumber;
+	private String upiId;
+
 }

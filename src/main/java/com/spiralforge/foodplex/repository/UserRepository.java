@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.spiralforge.foodplex.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Integer>{
 	
 }
