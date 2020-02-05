@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.spiralforge.foodplex.entity.VendorItem;
 
 @Repository
-public interface VendorItemRepository extends JpaRepository<VendorItem, Long>{
+public interface VendorItemRepository extends JpaRepository<VendorItem, Integer>{
 	
 }
