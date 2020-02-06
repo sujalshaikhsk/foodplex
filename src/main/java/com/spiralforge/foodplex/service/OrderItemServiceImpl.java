@@ -20,7 +20,6 @@ import com.spiralforge.foodplex.repository.OrderItemRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class OrderItemServiceImpl implements OrderItemService {
 
 	Logger logger = LoggerFactory.getLogger(OrderItemServiceImpl.class);
