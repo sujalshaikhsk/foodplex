@@ -82,12 +82,11 @@ public class UserControllerTest {
 	OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 	List<OrderDetail> orderDetailList=new ArrayList<>();
 
-
 	@Before
 	public void setUp() {
 		user.setFirstName("Sri");
 		user.setLastName("Keerthi");
-		user.setMobileNumber(1234568797L);
+		user.setMobileNumber("1234568797");
 		user.setPassword("sri");
 		user.setRole("USER");
 		user.setUserId(1);
@@ -241,5 +240,11 @@ public class UserControllerTest {
 		ResponseEntity<OrderDetailsDto> response=userController.getVendorOrders(userId);
 		assertEquals(ApiConstant.NO_CONTENT_CODE, response.getBody().getStatusCode());
 
+	}
+	
+	@Test
+	public void testVendorList() throws VendorNotFoundException {
+		logger.info("Entered into vendorList method in controller");
+		Mockito.when(userService.vendorList()).thenReturn(vendorList);
 	}
 }

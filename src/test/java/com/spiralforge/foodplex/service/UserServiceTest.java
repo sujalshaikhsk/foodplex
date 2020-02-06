@@ -1,6 +1,7 @@
 package com.spiralforge.foodplex.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spiralforge.foodplex.dto.LoginRequestDto;
 import com.spiralforge.foodplex.dto.LoginResponseDto;
@@ -33,12 +33,16 @@ import com.spiralforge.foodplex.entity.User;
 import com.spiralforge.foodplex.entity.Vendor;
 import com.spiralforge.foodplex.entity.VendorItem;
 import com.spiralforge.foodplex.exception.InvalidUpiIdException;
+import com.spiralforge.foodplex.exception.MobileNumberNotValidException;
+import com.spiralforge.foodplex.exception.UserNotFoundException;
+import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.payment.PayTM;
 import com.spiralforge.foodplex.payment.Payment;
 import com.spiralforge.foodplex.payment.PaymentFactory;
 import com.spiralforge.foodplex.payment.PhonePe;
-import com.spiralforge.foodplex.repository.OrderDetailRepository;
 import com.spiralforge.foodplex.repository.UserRepository;
+import com.spiralforge.foodplex.util.ApiConstant;
+import com.spiralforge.foodplex.util.Constant;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class UserServiceTest {
@@ -60,7 +64,9 @@ public class UserServiceTest {
 	@Mock
 	private PaymentFactory paymentFactory;
 
+
 	User user = new User();
+	List<User> userList = new ArrayList<>();
 	LoginRequestDto loginRequestDto = new LoginRequestDto();
 	LoginResponseDto loginResponseDto = new LoginResponseDto();
 	List<UserResponseDto> vendorList = new ArrayList<>();
@@ -82,7 +88,7 @@ public class UserServiceTest {
 	public void setUp() {
 		user.setFirstName("Sri");
 		user.setLastName("Keerthi");
-		user.setMobileNumber(1234568797L);
+		user.setMobileNumber("1234568797");
 		user.setPassword("sri");
 		user.setRole("USER");
 		user.setUserId(1);
@@ -90,6 +96,20 @@ public class UserServiceTest {
 
 		loginRequestDto.setMobileNumber("1234568797");
 		loginRequestDto.setPassword("sri");
+		user.setMobileNumber("1234568797");
+		user.setPassword("sri");
+		user.setRole("VENDOR");
+		user.setUserId(1);
+		userList.add(user);
+		
+		BeanUtils.copyProperties(userList, userResponseDto);
+		vendorList.add(userResponseDto);
+		
+		loginRequestDto.setMobileNumber("1234568797");
+		loginRequestDto.setPassword("sri");
+
+		loginResponseDto.setMessage(ApiConstant.LOGIN_SUCCESS);
+		loginResponseDto.setStatusCode(ApiConstant.SUCCESS_CODE);
 
 		BeanUtils.copyProperties(user, loginResponseDto);
 
@@ -213,4 +233,43 @@ public class UserServiceTest {
 		assertNull(result);
 	}
 
+
+	@Test
+	public void testUserLoginPositive() throws MobileNumberNotValidException, UserNotFoundException {
+		logger.info("Logged in successfully");
+		Mockito.when(userRepository.findByMobileNumberAndPassword(loginRequestDto.getMobileNumber(),
+				loginRequestDto.getPassword())).thenReturn(Optional.of(user));
+		loginResponseDto=userServiceImpl.userLogin(loginRequestDto);
+		assertEquals(200, loginResponseDto.getStatusCode());
+	}
+
+	@Test(expected = MobileNumberNotValidException.class)
+	public void testUserLoginNegative() throws MobileNumberNotValidException, UserNotFoundException {
+		logger.error("Mobile number is not valid");
+		loginRequestDto.setMobileNumber("12348797");
+		userServiceImpl.userLogin(loginRequestDto);
+	}
+	
+	@Test(expected = UserNotFoundException.class)
+	public void testUserLoginNegativeException() throws MobileNumberNotValidException, UserNotFoundException {
+		logger.error("Incorrect credentials");	
+		Mockito.when(userRepository.findByMobileNumberAndPassword("5678908976",
+				"chet")).thenReturn(Optional.of(user));
+		userServiceImpl.userLogin(loginRequestDto);
+	}
+	
+	@Test
+	public void testVendorListPositive() throws VendorNotFoundException {
+		Mockito.when(userRepository.findByRole(Constant.VENDOR)).thenReturn(userList);
+		vendorList=userServiceImpl.vendorList();
+		assertEquals(1, vendorList.size());
+	}
+	
+	@Test(expected = VendorNotFoundException.class)
+	public void testVendorListNegative() throws VendorNotFoundException {
+		logger.error("vendors not found");
+		List<User> userLists = new ArrayList<>();
+		Mockito.when(userRepository.findByRole(Constant.VENDOR)).thenReturn(userLists);
+		vendorList=userServiceImpl.vendorList();
+	}
 }

@@ -28,8 +28,8 @@ public class Item implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer itemId;
 	private String itemName;
-	
+
 	@OneToOne
-	@JoinColumn(name="category_id")
+	@JoinColumn(name = "category_id")
 	private Category category;
 }

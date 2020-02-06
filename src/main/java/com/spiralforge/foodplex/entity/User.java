@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "user")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,6 @@ public class User implements Serializable{
 	private String lastName;
 	private String password;
 	private String role;
-
-	private Long mobileNumber;
+	private String mobileNumber;
 	private String upiId;
 }

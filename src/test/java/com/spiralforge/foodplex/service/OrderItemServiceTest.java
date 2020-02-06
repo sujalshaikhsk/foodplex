@@ -17,7 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spiralforge.foodplex.dto.LoginRequestDto;
 import com.spiralforge.foodplex.dto.LoginResponseDto;
@@ -32,7 +31,6 @@ import com.spiralforge.foodplex.entity.OrderItem;
 import com.spiralforge.foodplex.entity.User;
 import com.spiralforge.foodplex.entity.Vendor;
 import com.spiralforge.foodplex.entity.VendorItem;
-import com.spiralforge.foodplex.repository.OrderDetailRepository;
 import com.spiralforge.foodplex.repository.OrderItemRepository;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -74,7 +72,7 @@ public class OrderItemServiceTest {
 	public void setUp() {
 		user.setFirstName("Sri");
 		user.setLastName("Keerthi");
-		user.setMobileNumber(1234568797L);
+		user.setMobileNumber("1234568797");
 		user.setPassword("sri");
 		user.setRole("USER");
 		user.setUserId(1);
@@ -137,8 +135,8 @@ public class OrderItemServiceTest {
 	@Test
 	public void testSaveOrderItemsPositive() {
 		logger.info("Got the list of flights");
-		Integer vendorItemId=1;
-		List<OrderItem> ordItmList= new ArrayList<>();
+		Integer vendorItemId = 1;
+		List<OrderItem> ordItmList = new ArrayList<>();
 		Mockito.when(vendorItemService.getVendorItemById(vendorItemId)).thenReturn(Optional.of(vendorItem));
 		Mockito.when(orderItemRepository.saveAll(orderItemList)).thenReturn(orderItemList);
 		ordItmList = orderItemServiceImpl.saveOrderItems(orderDetail, orderList);
