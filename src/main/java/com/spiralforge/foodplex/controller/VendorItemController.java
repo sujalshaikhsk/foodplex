@@ -24,30 +24,30 @@ import com.spiralforge.foodplex.service.VendorItemService;
 @RequestMapping("/vendors")
 @CrossOrigin(allowedHeaders = { "*", "*/" }, origins = { "*", "*/" })
 public class VendorItemController {
-	
+
 	@Autowired
 	VendorItemService vendorItemService;
-		
+
 	/**
-	 * @author Raghavendra A.			This method is used to save vendor item details.
-	 * @return 							Response message and code.
-	 * @throws VendorNotFoundException 	if vendors are not available 
+	 * @author Raghavendra A. This method is used to save vendor item details.
+	 * @return Response message and code.
+	 * @throws VendorNotFoundException if vendors are not available
 	 */
 	@PostMapping(path = "/{vendorId}/item")
-	public ResponseEntity<ResponseDto> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId, @RequestBody VendorItemDto vendorItemDto) 
-			throws VendorNotFoundException {	
-		ResponseDto responseDto = vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);		
+	public ResponseEntity<ResponseDto> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId,
+			@RequestBody VendorItemDto vendorItemDto) throws VendorNotFoundException {
+		ResponseDto responseDto = vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);
 		return ResponseEntity.ok().body(responseDto);
 	}
-	
+
 	/**
-	 * @author Raghavendra A.			This method is used to get all items, so that vendor can pick and 
-	 * 									choose item to build his list of items.  
-	 * @return 							Returns list of items.
-	 */	
+	 * @author Raghavendra A. This method is used to get all items, so that vendor
+	 *         can pick and choose item to build his list of items.
+	 * @return Returns list of items.
+	 */
 	@GetMapping
-	public ResponseEntity<List<VendorItemDto>> getVendorItemDetails() {	
-		List<VendorItemDto> vendorItemDto = vendorItemService.getVendorItemDetails();		
+	public ResponseEntity<List<VendorItemDto>> getVendorItemDetails() {
+		List<VendorItemDto> vendorItemDto = vendorItemService.getVendorItemDetails();
 		return ResponseEntity.ok().body(vendorItemDto);
 	}
 }

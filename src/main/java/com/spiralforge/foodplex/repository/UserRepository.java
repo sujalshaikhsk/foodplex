@@ -33,4 +33,6 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	 */
 	List<User> findByRole(String vendor);
 
+	User findByUserId(Integer userId);
+
 }
