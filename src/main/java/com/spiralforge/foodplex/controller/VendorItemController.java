@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spiralforge.foodplex.dto.ResponseDto;
 import com.spiralforge.foodplex.dto.VendorItemDto;
+import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.service.VendorItemService;
 
 /**
@@ -23,13 +25,24 @@ public class VendorItemController {
 	
 	@Autowired
 	VendorItemService vendorItemService;
-			
-	@PostMapping(path = "/{vendorId}/item", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId, @RequestBody VendorItemDto vendorItemDto) {	
-		vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);		
-		return ResponseEntity.ok().body("Item saved successfully");
+		
+	/**
+	 * @author Raghavendra A.			This method is used to save vendor item details.
+	 * @return 							Response message and code.
+	 * @throws VendorNotFoundException 	if vendors are not available 
+	 */
+	@PostMapping(path = "/{vendorId}/item")
+	public ResponseEntity<ResponseDto> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId, @RequestBody VendorItemDto vendorItemDto) 
+			throws VendorNotFoundException {	
+		ResponseDto responseDto = vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);		
+		return ResponseEntity.ok().body(responseDto);
 	}
 	
+	/**
+	 * @author Raghavendra A.			This method is used to get all items, so that vendor can pick and 
+	 * 									choose item to build his list of items.  
+	 * @return 							Returns list of items.
+	 */	
 	@GetMapping
 	public ResponseEntity<List<VendorItemDto>> getVendorItemDetails() {	
 		List<VendorItemDto> vendorItemDto = vendorItemService.getVendorItemDetails();		

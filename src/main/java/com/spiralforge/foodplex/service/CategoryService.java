@@ -9,6 +9,9 @@ import com.spiralforge.foodplex.entity.Category;
  * @since 2020-02-05.
  */
 public interface CategoryService {
-
+	
+	/**
+	 * This method to get list of categories.
+	 */
 	public List<Category> categoryList();
 }

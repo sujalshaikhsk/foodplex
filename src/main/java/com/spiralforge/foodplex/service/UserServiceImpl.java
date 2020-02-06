@@ -26,7 +26,6 @@ import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.payment.Payment;
 import com.spiralforge.foodplex.payment.PaymentFactory;
 import com.spiralforge.foodplex.repository.UserRepository;
-import com.spiralforge.foodplex.repository.VendorRepository;
 import com.spiralforge.foodplex.util.ApiConstant;
 import com.spiralforge.foodplex.util.Constant;
 
@@ -44,9 +43,6 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private VendorRepository vendorRepository;
 
 	@Autowired
 	private PaymentFactory paymentFactory;
