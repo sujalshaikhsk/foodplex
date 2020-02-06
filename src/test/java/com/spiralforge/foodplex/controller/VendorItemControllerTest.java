@@ -45,8 +45,7 @@ public class VendorItemControllerTest {
 		vendorItemDto.setPrice(34);
 		
 		resposeDto.setMessage(ApiConstant.SUCCESS);
-		resposeDto.setStatusCode(ApiConstant.SUCCESS_CODE);
-		
+		resposeDto.setStatusCode(ApiConstant.SUCCESS_CODE);		
 		
 	}
 
@@ -59,11 +58,10 @@ public class VendorItemControllerTest {
 	}
 	
 	@Test
-	public void testGetVendorItemDetails() throws VendorNotFoundException {
+	public void testGetVendorItemDetails() {
 		logger.info("Entered into GetVendorItemDetails method in controller");
-		Mockito.when(vendorItemService.getVendorItemDetails()).thenReturn(null);
-		resposeDto = vendorItemController.saveVendorItemDetails(vendorId, vendorItemDto).getBody();
+		Mockito.when(vendorItemService.getVendorItemDetails()).thenReturn(vendorItemList);
+		//resposeDto = vendorItemController.saveVendorItemDetails(vendorId, vendorItemDto).getBody();
 		assertEquals(200, resposeDto.getStatusCode());
-	}
-	
+	}	
 }
