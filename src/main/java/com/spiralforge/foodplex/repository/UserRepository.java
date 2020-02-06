@@ -13,8 +13,8 @@ import com.spiralforge.foodplex.entity.User;
  * @since 2020-02-05.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-
+public interface UserRepository extends JpaRepository<User, Integer>{
+	
 	/**
 	 * @author Sri Keerthna.
 	 * @since 2020-02-05. It will validate the mobile number and password in

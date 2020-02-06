@@ -10,6 +10,9 @@ import com.spiralforge.foodplex.dto.ItemCategoryDto;
  */
 public interface CategoryService {
 
+	/**
+	 * This method to get list of categories.
+	 */
 	public List<ItemCategoryDto> getItemCategoryListByVendorId(Integer userId);
 
 }

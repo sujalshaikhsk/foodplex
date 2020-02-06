@@ -7,28 +7,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * @author Sri Keerthna.
- * @since 2020-02-05.
- */
 @Setter
 @Getter
 @Entity
-@Table(name = "item")
-public class Item implements Serializable {
+@Table(name = "order_item")
+public class OrderItem implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer itemId;
-	private String itemName;
+	private Integer orderItemId;
+	private Integer quantity;
+	private Double price;
 	
 	@OneToOne
-	@JoinColumn(name="category_id")
-	private Category category;
+	@JoinColumn(name="vendor_item_id")
+	private VendorItem vendorItem;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="order_detail_id")
+	private OrderDetail orderDetail;
 }

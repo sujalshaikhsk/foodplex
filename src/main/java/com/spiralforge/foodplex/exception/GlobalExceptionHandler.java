@@ -76,5 +76,19 @@ public class GlobalExceptionHandler {
 		String defaultMessage = exception.getMessage();
 		return new ExceptionResponseDto(ApiConstant.INTERNAL_SERVER_ERROR, defaultMessage);
 	}
+	
+	/**
+	 * @description All Handle Exception
+	 *
+	 * @param ex
+	 * @return
+	 */
+	@ExceptionHandler(InvalidOrderException.class)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public final ExceptionResponseDto handleInvalidOrderExceptions(InvalidOrderException exception) {
+		String defaultMessage = exception.getMessage();
+		return new ExceptionResponseDto(ApiConstant.INVALID_ORDER, defaultMessage);
+	}
 
 }

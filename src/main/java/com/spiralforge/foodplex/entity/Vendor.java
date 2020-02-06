@@ -10,25 +10,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * @author Sri Keerthna.
- * @since 2020-02-05.
- */
 @Setter
 @Getter
 @Entity
-@Table(name = "item")
-public class Item implements Serializable {
+@Table(name = "vendor")
+public class Vendor implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer itemId;
-	private String itemName;
+	private Integer vendorId;
+	private String vendorName;
+	private Double rating;
 	
+	@JsonIgnore
 	@OneToOne
-	@JoinColumn(name="category_id")
-	private Category category;
+	@JoinColumn(name="user_id")
+	private User user;
 }

@@ -1,5 +1,7 @@
 package com.spiralforge.foodplex.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,15 +14,11 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * @author Sri Keerthna.
- * @since 2020-02-05.
- */
 @Setter
 @Getter
 @Entity
 @Table(name = "vendor_item")
-public class VendorItem {
+public class VendorItem implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +32,8 @@ public class VendorItem {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+
+	@OneToOne
+	@JoinColumn(name = "vendor_id")
+	private Vendor vendor;
 }
