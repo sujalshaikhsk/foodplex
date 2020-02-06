@@ -43,6 +43,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	@Override
 	public OrderDetail saveOrderDetail(User user, OrderRequestDto orderRequestDto) {
 		logger.info("inside order place method");
+		OrderDetail orderDetail1=null; 
 		OrderDetail orderDetail = new OrderDetail();
 		BeanUtils.copyProperties(orderRequestDto, orderDetail);
 		orderDetail.setTotalPrice(getTotalItemPrice(orderRequestDto));
@@ -50,7 +51,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 		orderDetail.setStatus(Constant.CONFIRMED_STATUS);
 		orderDetail.setOrderDate(LocalDateTime.now());
 		orderDetail.setUser(user);
-		orderDetail = orderDetailRepository.save(orderDetail);
+		orderDetail1 = orderDetailRepository.save(orderDetail);
 
 		if (!Objects.isNull(orderDetail))
 			orderItemService.saveOrderItems(orderDetail, orderRequestDto.getOrderList());

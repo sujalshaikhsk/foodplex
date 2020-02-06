@@ -2,6 +2,7 @@ package com.spiralforge.foodplex.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -246,5 +247,6 @@ public class UserControllerTest {
 	public void testVendorList() throws VendorNotFoundException {
 		logger.info("Entered into vendorList method in controller");
 		Mockito.when(userService.vendorList()).thenReturn(vendorList);
+		assertNotNull(vendorList);
 	}
 }
