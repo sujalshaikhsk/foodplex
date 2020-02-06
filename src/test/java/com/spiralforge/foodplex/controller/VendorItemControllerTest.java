@@ -41,6 +41,7 @@ public class VendorItemControllerTest {
 		vendorItemDto.setCategoryName("Beverages");
 		vendorItemDto.setItemId(100);
 		vendorItemDto.setPrice(34);
+		vendorItemList.add(vendorItemDto);
 		
 		resposeDto.setMessage(ApiConstant.SUCCESS);
 		resposeDto.setStatusCode(ApiConstant.SUCCESS_CODE);			
