@@ -32,6 +32,9 @@ public class OrderValidatorImpl implements OrderValidator<Integer, OrderRequestD
 	@Autowired
 	private VendorItemService vendorItemService;
 
+	@Autowired
+	private Validator validator;
+
 	/**
 	 * 
 	 */
@@ -62,11 +65,10 @@ public class OrderValidatorImpl implements OrderValidator<Integer, OrderRequestD
 	private boolean validateItem(List<OrderItemDto> orderList) {
 		logger.info("inside validate items");
 
-		return orderList.stream().map(order -> {
-			if (!vendorItemService.getVendorItemById(order.getVendorItemId()).isPresent())
-				return true;
-			return false;
-		}).filter(itemStatus->itemStatus.equals(true)).findAny().get();	
+		Optional<Boolean> optionalOrderFlag = orderList.stream().map(validator::isValid)
+				.filter(itemStatus -> itemStatus.equals(true)).findAny();
+
+		return (optionalOrderFlag.isPresent() && optionalOrderFlag.get());
 	}
 
 }
