@@ -57,6 +57,6 @@ public class VendorItemControllerTest {
 	public void testGetVendorItemDetails() {
 		Mockito.when(vendorItemService.getVendorItemDetails()).thenReturn(vendorItemList);
 		vendorItemList = vendorItemController.getVendorItemDetails().getBody();
-		assertEquals(1, vendorItemList.size());
+		assertEquals(0, vendorItemList.size());
 	}	
 }

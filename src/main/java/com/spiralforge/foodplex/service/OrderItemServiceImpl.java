@@ -33,8 +33,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 	 *         payment done ,save all the items for the order and calculate the
 	 *         total price.
 	 * 
-	 * @param orderDetail          is the order details
-	 * @param orderList is the list of items
+	 * @param orderDetail is the order details
+	 * @param orderList   is the list of items
 	 * @return list of order item.
 	 */
 	@Override
