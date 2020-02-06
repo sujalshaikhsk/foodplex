@@ -21,18 +21,18 @@ import com.spiralforge.foodplex.service.VendorItemService;
 @RequestMapping("/vendors")
 public class VendorItemController {
 	
-	@Autowired
-	VendorItemService vendorItemService;
-			
-	@PostMapping(path = "/{vendorId}/item", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId, @RequestBody VendorItemDto vendorItemDto) {	
-		vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);		
-		return ResponseEntity.ok().body("Item saved successfully");
-	}
-	
-	@GetMapping
-	public ResponseEntity<List<VendorItemDto>> getVendorItemDetails() {	
-		List<VendorItemDto> vendorItemDto = vendorItemService.getVendorItemDetails();		
-		return ResponseEntity.ok().body(vendorItemDto);
-	}
+//	@Autowired
+//	VendorItemService vendorItemService;
+//			
+//	@PostMapping(path = "/{vendorId}/item", consumes = "application/json", produces = "application/json")
+//	public ResponseEntity<String> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId, @RequestBody VendorItemDto vendorItemDto) {	
+//		vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);		
+//		return ResponseEntity.ok().body("Item saved successfully");
+//	}
+//	
+//	@GetMapping
+//	public ResponseEntity<List<VendorItemDto>> getVendorItemDetails() {	
+//		List<VendorItemDto> vendorItemDto = vendorItemService.getVendorItemDetails();		
+//		return ResponseEntity.ok().body(vendorItemDto);
+//	}
 }

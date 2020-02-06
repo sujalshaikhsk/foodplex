@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spiralforge.foodplex.entity.Category;
+import com.spiralforge.foodplex.dto.CategoryResponseDto;
+import com.spiralforge.foodplex.dto.ItemCategoryDto;
 import com.spiralforge.foodplex.service.CategoryService;
 
 /**
@@ -41,9 +43,14 @@ public class CategoryController {
 	 * @return List of categories are fetched.
 	 */
 	@GetMapping
-	public ResponseEntity<List<Category>> categoryList() {
+	public ResponseEntity<CategoryResponseDto> getItemCategoryListByVendorId(@RequestParam Integer userId) {
 		logger.info("Entered into categoryList method in controller");
-		return new ResponseEntity<>(categoryService.categoryList(), HttpStatus.OK);
+		List<ItemCategoryDto> itemCategoryList = categoryService.getItemCategoryListByVendorId(userId);
+		CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
+		categoryResponseDto.setStatusCode(HttpStatus.OK.value());
+		categoryResponseDto.setItemCategoryList(itemCategoryList);
+		return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
 
 	}
+
 }

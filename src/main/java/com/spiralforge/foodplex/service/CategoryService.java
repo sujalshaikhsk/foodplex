@@ -2,7 +2,7 @@ package com.spiralforge.foodplex.service;
 
 import java.util.List;
 
-import com.spiralforge.foodplex.entity.Category;
+import com.spiralforge.foodplex.dto.ItemCategoryDto;
 
 /**
  * @author Sri Keerthna.
@@ -10,5 +10,6 @@ import com.spiralforge.foodplex.entity.Category;
  */
 public interface CategoryService {
 
-	public List<Category> categoryList();
+	public List<ItemCategoryDto> getItemCategoryListByVendorId(Integer userId);
+
 }

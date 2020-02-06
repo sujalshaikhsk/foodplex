@@ -42,11 +42,11 @@ public class CategoryControllerTest {
 		categoryList.add(category);
 	}
 	
-	@Test
-	public void testCategoryListPositive() {
-		logger.info("Entered into categoryList method in controller");
-		Mockito.when(categoryService.categoryList()).thenReturn(categoryList);
-		Integer result=categoryController.categoryList().getStatusCodeValue();
-		assertEquals(200, result);
-	}
+//	@Test
+//	public void testCategoryListPositive() {
+//		logger.info("Entered into categoryList method in controller");
+//		Mockito.when(categoryService.categoryList()).thenReturn(categoryList);
+//		Integer result=categoryController.categoryList().getStatusCodeValue();
+//		assertEquals(200, result);
+//	}
 }
