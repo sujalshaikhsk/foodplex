@@ -1,5 +1,7 @@
 package com.spiralforge.foodplex.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "item")
-public class Item {
+public class Item implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

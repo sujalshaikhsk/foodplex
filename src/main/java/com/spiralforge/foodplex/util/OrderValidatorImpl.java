@@ -40,7 +40,7 @@ public class OrderValidatorImpl implements OrderValidator<Integer, OrderRequestD
 		if (Objects.isNull(orderRequestDto)) {
 			logger.error(ApiConstant.INVALID_ORDER);
 			throw new InvalidOrderException(ApiConstant.INVALID_ORDER);
-		} else if (orderRequestDto.getOrderList().size() < 1) {
+		} else if (orderRequestDto.getOrderList().isEmpty()) {
 			logger.error(ApiConstant.ITEM_NOT_FOUND);
 			throw new InvalidOrderException(ApiConstant.ITEM_NOT_FOUND);
 		} else if (!userService.getUserByUserId(userId).isPresent()) {
@@ -62,17 +62,13 @@ public class OrderValidatorImpl implements OrderValidator<Integer, OrderRequestD
 	private boolean validateItem(List<OrderItemDto> orderList) {
 		logger.info("inside validate items");
 
-		Boolean orderFlag = false;
-		Optional<Boolean> OptionalOrderFlag = orderList.stream().map(order -> {
+		Optional<Boolean> optionalOrderFlag = orderList.stream().map(order -> {
 			if (!vendorItemService.getVendorItemById(order.getVendorItemId()).isPresent())
 				return true;
 			return false;
 		}).filter(itemStatus->itemStatus.equals(true)).findAny();
 		
-		if (OptionalOrderFlag.isPresent() && OptionalOrderFlag.get())
-			orderFlag = true;
-		
-		return orderFlag;
+		return (optionalOrderFlag.isPresent() && optionalOrderFlag.get());	
 	}
 
 }

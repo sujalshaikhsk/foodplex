@@ -96,7 +96,7 @@ public class VendorItemServiceImpl implements VendorItemService {
 	 */
 	@Override
 	public List<VendorItemDto> getVendorItemDetails() {				
-		List<VendorItemDto> dtoList = new ArrayList<VendorItemDto>();
+		List<VendorItemDto> dtoList = new ArrayList<>();
 		List<Item> itemList = itemRepository.findAll();
 		itemList.forEach(item -> {
 				VendorItemDto vendorItemDto = new VendorItemDto();

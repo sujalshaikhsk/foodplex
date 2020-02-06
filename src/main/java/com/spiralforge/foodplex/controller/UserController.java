@@ -73,10 +73,10 @@ public class UserController {
 		if (orderValidator.validate(userId, orderRequestDto)) {
 			OrderResponseDto orderResponseDto = new OrderResponseDto();
 			OrderDetail orderDetail = userService.placeOrder(userId, orderRequestDto);
-			logger.info("place order completed");
+			logger.info("place order started");
 			if (Objects.isNull(orderDetail)) {
-				orderResponseDto.setStatusCode(ApiConstant.SUCCESS_CODE);
-				orderResponseDto.setMessage(ApiConstant.SUCCESS);
+				orderResponseDto.setStatusCode(ApiConstant.NO_CONTENT_CODE);
+				orderResponseDto.setMessage(ApiConstant.NO_ELEMENT_FOUND);
 				return new ResponseEntity<>(orderResponseDto, HttpStatus.NO_CONTENT);
 			} else {
 				BeanUtils.copyProperties(orderDetail, orderResponseDto);
@@ -104,14 +104,13 @@ public class UserController {
 
 		OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 		List<OrderDetail> orders = userService.getOrders(userId);
-		logger.info("place order completed");
+		logger.info("inside get orders ");
 		if (Objects.isNull(orders) || orders.isEmpty()) {
-			orderDetailsDto.setStatusCode(ApiConstant.SUCCESS_CODE);
-			orderDetailsDto.setMessage(ApiConstant.SUCCESS);
+			orderDetailsDto.setStatusCode(ApiConstant.NO_CONTENT_CODE);
+			orderDetailsDto.setMessage(ApiConstant.NO_ELEMENT_FOUND);
 			return new ResponseEntity<>(orderDetailsDto, HttpStatus.NO_CONTENT);
 		} else {
 			orderDetailsDto.setOrders(orders);
-			;
 			orderDetailsDto.setStatusCode(ApiConstant.SUCCESS_CODE);
 			orderDetailsDto.setMessage(ApiConstant.SUCCESS);
 			return new ResponseEntity<>(orderDetailsDto, HttpStatus.OK);
@@ -133,10 +132,10 @@ public class UserController {
 
 		OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 		List<OrderDetail> orders = userService.getVendorOrders(userId);
-		logger.info("place order completed");
+		logger.info("get orders for vendors");
 		if (Objects.isNull(orders) || orders.isEmpty()) {
-			orderDetailsDto.setStatusCode(ApiConstant.SUCCESS_CODE);
-			orderDetailsDto.setMessage(ApiConstant.SUCCESS);
+			orderDetailsDto.setStatusCode(ApiConstant.NO_CONTENT_CODE);
+			orderDetailsDto.setMessage(ApiConstant.NO_ELEMENT_FOUND);
 			return new ResponseEntity<>(orderDetailsDto, HttpStatus.NO_CONTENT);
 		} else {
 			orderDetailsDto.setOrders(orders);
