@@ -1,4 +1,4 @@
-package com.spiralforge.foodplex.controller.service;
+package com.spiralforge.foodplex.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

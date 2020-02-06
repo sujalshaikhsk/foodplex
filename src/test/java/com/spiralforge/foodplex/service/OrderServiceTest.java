@@ -71,7 +71,7 @@ public class OrderServiceTest {
 	public void setUp() {
 		user.setFirstName("Sri");
 		user.setLastName("Keerthi");
-		user.setMobileNumber(1234568797L);
+		user.setMobileNumber("1234568797");
 		user.setPassword("sri");
 		user.setRole("USER");
 		user.setUserId(1);

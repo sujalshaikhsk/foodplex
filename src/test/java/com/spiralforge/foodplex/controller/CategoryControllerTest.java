@@ -40,7 +40,8 @@ public class CategoryControllerTest {
 	Category category = new Category();
 	List<Category> categoryList = new ArrayList<>();
 	CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
-	List<ItemCategoryDto> ItemCategoryDto = new ArrayList<>();
+	ItemCategoryDto itemCategoryDto= new ItemCategoryDto();
+	List<ItemCategoryDto> itemCategoryDtoList = new ArrayList<>();
 	List<ItemDto> itemList = new ArrayList<>();
 	ItemDto ItemDto=new ItemDto();
 	
@@ -55,16 +56,18 @@ public class CategoryControllerTest {
 		ItemDto.setItemId(1);
 		ItemDto.setItemName("tea");
 		itemList.add(ItemDto);
-		itemList.set(1, ItemDto);
 		
-	//	ItemCategoryDto.set(1, itemList);
+		itemCategoryDto.setItemList(itemList);
+		itemCategoryDto.setCategoryName("Salads");
+		itemCategoryDtoList.add(itemCategoryDto);
+		
 	}
 	
 	@Test
 	public void testCategoryListPositive() {
-//		logger.info("Entered into categoryList method in controller");
-//		Mockito.when(categoryService.getItemCategoryListByVendorId(1)).thenReturn(ItemCategoryDto);
-//		ResponseEntity<CategoryResponseDto> result=categoryController.getItemCategoryListByVendorId(1);
-//		assertEquals(1, result);
+		logger.info("Entered into categoryList method in controller");
+		Mockito.when(categoryService.getItemCategoryListByVendorId(1)).thenReturn(itemCategoryDtoList);
+		ResponseEntity<CategoryResponseDto> result=categoryController.getItemCategoryListByVendorId(1);
+		assertEquals(HttpStatus.OK.value(), result.getStatusCodeValue());
 	}
 }
