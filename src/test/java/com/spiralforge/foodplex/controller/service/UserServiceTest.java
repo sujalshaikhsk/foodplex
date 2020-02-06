@@ -23,9 +23,11 @@ import com.spiralforge.foodplex.dto.UserResponseDto;
 import com.spiralforge.foodplex.entity.User;
 import com.spiralforge.foodplex.exception.MobileNumberNotValidException;
 import com.spiralforge.foodplex.exception.UserNotFoundException;
+import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.repository.UserRepository;
 import com.spiralforge.foodplex.service.UserServiceImpl;
 import com.spiralforge.foodplex.util.ApiConstant;
+import com.spiralforge.foodplex.util.Constant;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class UserServiceTest {
@@ -42,10 +44,12 @@ public class UserServiceTest {
 	UserRepository userRepository;
 
 	User user = new User();
+	List<User> userList = new ArrayList<>();
 	LoginRequestDto loginRequestDto = new LoginRequestDto();
 	LoginResponseDto loginResponseDto = new LoginResponseDto();
 	List<UserResponseDto> vendorList = new ArrayList<>();
 	UserResponseDto userResponseDto = new UserResponseDto();
+	
 	
 	@Before
 	public void setUp() {
@@ -53,9 +57,13 @@ public class UserServiceTest {
 		user.setLastName("Keerthi");
 		user.setMobileNumber("1234568797");
 		user.setPassword("sri");
-		user.setRole("USER");
+		user.setRole("VENDOR");
 		user.setUserId(1);
-
+		userList.add(user);
+		
+		BeanUtils.copyProperties(userList, userResponseDto);
+		vendorList.add(userResponseDto);
+		
 		loginRequestDto.setMobileNumber("1234568797");
 		loginRequestDto.setPassword("sri");
 
@@ -86,13 +94,26 @@ public class UserServiceTest {
 		userService.userLogin(loginRequestDto);
 	}
 	
-//	@Test(expected = UserNotFoundException.class)
-//	public void testUserLoginNegativeException() throws MobileNumberNotValidException, UserNotFoundException {
-//		logger.error("Incorrect credentials");
-//		loginRequestDto.setMobileNumber("1230008797");
-//		loginRequestDto.setPassword("sree");
-//		Mockito.when(userRepository.findByMobileNumberAndPassword(loginRequestDto.getMobileNumber(),
-//				loginRequestDto.getPassword())).thenReturn(Optional.of(user));
-//		userService.userLogin(loginRequestDto);
-//	}
+	@Test(expected = UserNotFoundException.class)
+	public void testUserLoginNegativeException() throws MobileNumberNotValidException, UserNotFoundException {
+		logger.error("Incorrect credentials");	
+		Mockito.when(userRepository.findByMobileNumberAndPassword("5678908976",
+				"chet")).thenReturn(Optional.of(user));
+		userService.userLogin(loginRequestDto);
+	}
+	
+	@Test
+	public void testVendorListPositive() throws VendorNotFoundException {
+		Mockito.when(userRepository.findByRole(Constant.VENDOR)).thenReturn(userList);
+		vendorList=userService.vendorList();
+		assertEquals(1, vendorList.size());
+	}
+	
+	@Test(expected = VendorNotFoundException.class)
+	public void testVendorListNegative() throws VendorNotFoundException {
+		logger.error("vendors not found");
+		List<User> userLists = new ArrayList<>();
+		Mockito.when(userRepository.findByRole(Constant.VENDOR)).thenReturn(userLists);
+		vendorList=userService.vendorList();
+	}
 }

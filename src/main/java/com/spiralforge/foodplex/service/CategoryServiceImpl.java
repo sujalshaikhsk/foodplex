@@ -1,7 +1,9 @@
 package com.spiralforge.foodplex.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.spiralforge.foodplex.dto.ItemCategoryDto;
 import com.spiralforge.foodplex.dto.ItemDto;
+import com.spiralforge.foodplex.dto.ItemPriceDto;
 import com.spiralforge.foodplex.entity.Category;
 import com.spiralforge.foodplex.entity.Item;
 import com.spiralforge.foodplex.entity.User;
@@ -56,18 +59,21 @@ public class CategoryServiceImpl implements CategoryService {
 		User user = userRepository.findByUserId(userId);
 		List<VendorItem> vendorItemList = vendorItemRepository.findVendorItemByUser(user);
 
-		List<Item> itemList = vendorItemList.stream().map(item -> item.getItem()).collect(Collectors.toList());
-		List<Category> categoryList = vendorItemList.stream().map(item -> item.getItem().getCategory())
+		List<ItemPriceDto> itemList = vendorItemList.stream().map(item -> convertVendorItemEntityToDto(item))
 				.collect(Collectors.toList());
+
+		List<Item> items = itemRepository.findAll();
+		Set<Category> nameSet = new HashSet<>();
+		List<Item> categoryList = items.stream().filter(e -> nameSet.add(e.getCategory())).collect(Collectors.toList());
 
 		List<ItemCategoryDto> itemCategoryDtos = new ArrayList<>();
 		categoryList.forEach(category -> {
 			ItemCategoryDto itemCategoryDto = new ItemCategoryDto();
-			itemCategoryDto.setCategoryName(category.getCategoryName());
+			itemCategoryDto.setCategoryName(category.getCategory().getCategoryName());
 
 			List<ItemDto> itemDtos = itemList.stream()
-					.filter(item -> category.getCategoryId().equals(item.getCategory().getCategoryId()))
-					.map(item -> convertEntityToDto(item)).collect(Collectors.toList());
+					.filter(itemPriceDto -> category.getCategory().getCategoryId().equals(itemPriceDto.getCategoryId()))
+					.map(itemPriceDto -> convertEntityToDto(itemPriceDto)).collect(Collectors.toList());
 			itemCategoryDto.setItemList(itemDtos);
 			itemCategoryDtos.add(itemCategoryDto);
 
@@ -76,10 +82,20 @@ public class CategoryServiceImpl implements CategoryService {
 		return itemCategoryDtos;
 	}
 
-	public ItemDto convertEntityToDto(Item item) {
+	public ItemPriceDto convertVendorItemEntityToDto(VendorItem item) {
+		ItemPriceDto itemDto = new ItemPriceDto();
+		itemDto.setItemId(item.getItem().getItemId());
+		itemDto.setItemName(item.getItem().getItemName());
+		itemDto.setItemPrice(item.getPrice());
+		itemDto.setCategoryId(item.getItem().getCategory().getCategoryId());
+		return itemDto;
+	}
+
+	public ItemDto convertEntityToDto(ItemPriceDto item) {
 		ItemDto itemDto = new ItemDto();
 		itemDto.setItemId(item.getItemId());
 		itemDto.setItemName(item.getItemName());
+		itemDto.setItemPrice(item.getItemPrice());
 		return itemDto;
 	}
 
