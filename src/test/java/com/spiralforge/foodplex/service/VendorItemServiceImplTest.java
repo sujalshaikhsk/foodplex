@@ -1,5 +1,6 @@
 package com.spiralforge.foodplex.service;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -18,10 +19,13 @@ import com.spiralforge.foodplex.dto.ResponseDto;
 import com.spiralforge.foodplex.dto.VendorItemDto;
 import com.spiralforge.foodplex.entity.Category;
 import com.spiralforge.foodplex.entity.Item;
+import com.spiralforge.foodplex.entity.User;
 import com.spiralforge.foodplex.entity.Vendor;
 import com.spiralforge.foodplex.entity.VendorItem;
+import com.spiralforge.foodplex.exception.UserNotFoundException;
 import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.repository.ItemRepository;
+import com.spiralforge.foodplex.repository.UserRepository;
 import com.spiralforge.foodplex.repository.VendorItemRepository;
 import com.spiralforge.foodplex.repository.VendorRepository;
 
@@ -40,14 +44,20 @@ public class VendorItemServiceImplTest {
 	@Mock
 	ItemRepository itemRepository;
 	
+	@Mock
+	UserRepository userRepository;
+	
 	VendorItemDto vendorItemDto = new VendorItemDto();
 	ResponseDto resposeDto = new ResponseDto();	
 	List<Item> itemList = new ArrayList<Item>();	
 	List<VendorItemDto> vendorItemDtoList = new ArrayList<VendorItemDto>();	
 	VendorItem vendorItem = new VendorItem();
+	User user = new User();
 	
 	@Before
 	public void setUp() {	
+		user.setUserId(1);
+		
 		vendorItemDto.setCategoryId(1);
 		vendorItemDto.setCategoryName("Beverages");
 		vendorItemDto.setItemId(100);
@@ -74,18 +84,38 @@ public class VendorItemServiceImplTest {
 		vendorItem.setPrice(100.00);
 		vendorItem.setVendor(new Vendor());
 		vendorItem.setVendorItemId(1000);
+		
+		user.setFirstName("TestFirstName");
+	}
+	
+	@Test(expected = UserNotFoundException.class)
+	public void testSaveVendorItemDetailsUserNotFoundException() throws VendorNotFoundException, UserNotFoundException {
+		vendorItemServiceImpl.saveVendorItemDetails(null, vendorItemDto);
+	}
+	
+	@Test(expected = UserNotFoundException.class)
+	public void testSaveVendorItemDetailsVendorNotFoundException1() throws VendorNotFoundException, UserNotFoundException {
+		Mockito.when(userRepository.findById(Mockito.any())).thenReturn(Optional.ofNullable(null));
+		vendorItemServiceImpl.saveVendorItemDetails(1, vendorItemDto);
 	}
 	
 	@Test(expected = VendorNotFoundException.class)
-	public void testSaveVendorItemDetailsWithNullVendorId() throws VendorNotFoundException {
-		resposeDto = vendorItemServiceImpl.saveVendorItemDetails(null, vendorItemDto);
-		assertEquals(200, resposeDto.getStatusCode());
+	public void testSaveVendorItemDetailsVendorNotFoundException() throws VendorNotFoundException, UserNotFoundException {
+		Mockito.when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
+		Mockito.when(vendorRepository.findById(1)).thenReturn(Optional.ofNullable(null));
+		vendorItemServiceImpl.saveVendorItemDetails(1, vendorItemDto);
 	}
 	
 	@Test
-	public void testSaveVendorItemDetails() throws VendorNotFoundException {
-		resposeDto = vendorItemServiceImpl.saveVendorItemDetails(10, vendorItemDto);
-		assertEquals(200, resposeDto.getStatusCode());
+	public void testSaveVendorItemDetails() throws VendorNotFoundException, UserNotFoundException {
+		
+		Vendor vendor = new Vendor();
+		vendor.setVendorId(1);
+		Mockito.when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(user));
+		Mockito.when(vendorRepository.findByUser(Mockito.any())).thenReturn(Optional.of(vendor));
+		Mockito.when(itemRepository.getOne(Mockito.any())).thenReturn(new Item());
+		Mockito.when(vendorItemRepository.save(Mockito.any())).thenReturn(new VendorItem());
+		assertNotNull(vendorItemServiceImpl.saveVendorItemDetails(1, vendorItemDto));
 	}
 	
 	@Test

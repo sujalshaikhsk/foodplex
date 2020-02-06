@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.spiralforge.foodplex.dto.ResponseDto;
 import com.spiralforge.foodplex.dto.VendorItemDto;
 import com.spiralforge.foodplex.entity.VendorItem;
+import com.spiralforge.foodplex.exception.UserNotFoundException;
 import com.spiralforge.foodplex.exception.VendorNotFoundException;
 
 /**
@@ -24,7 +25,7 @@ public interface VendorItemService {
 	 * @return
 	 * @throws VendorNotFoundException
 	 */
-	ResponseDto saveVendorItemDetails(Integer vendorId, VendorItemDto vendorItemDto) throws VendorNotFoundException;
+	ResponseDto saveVendorItemDetails(Integer vendorId, VendorItemDto vendorItemDto) throws VendorNotFoundException, UserNotFoundException;
 
 	/**
 	 * This method used to store add items against particular vendor.

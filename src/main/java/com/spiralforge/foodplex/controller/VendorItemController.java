@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spiralforge.foodplex.dto.ResponseDto;
 import com.spiralforge.foodplex.dto.VendorItemDto;
+import com.spiralforge.foodplex.exception.UserNotFoundException;
 import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.service.VendorItemService;
 
@@ -35,7 +36,7 @@ public class VendorItemController {
 	 */
 	@PostMapping(path = "/{vendorId}/item")
 	public ResponseEntity<ResponseDto> saveVendorItemDetails(@PathVariable("vendorId") Integer vendorId,
-			@RequestBody VendorItemDto vendorItemDto) throws VendorNotFoundException {
+			@RequestBody VendorItemDto vendorItemDto) throws VendorNotFoundException, UserNotFoundException {
 		ResponseDto responseDto = vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto);
 		return ResponseEntity.ok().body(responseDto);
 	}
