@@ -24,8 +24,6 @@ import com.spiralforge.foodplex.util.ApiConstant;
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class VendorItemControllerTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(VendorItemControllerTest.class);
-	
 	@InjectMocks
 	VendorItemController vendorItemController;
 	
@@ -45,13 +43,11 @@ public class VendorItemControllerTest {
 		vendorItemDto.setPrice(34);
 		
 		resposeDto.setMessage(ApiConstant.SUCCESS);
-		resposeDto.setStatusCode(ApiConstant.SUCCESS_CODE);		
-		
+		resposeDto.setStatusCode(ApiConstant.SUCCESS_CODE);			
 	}
 
 	@Test
 	public void testSaveVendorItemDetails() throws VendorNotFoundException {
-		logger.info("Entered into SaveVendorItemDetails method in controller");
 		Mockito.when(vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto)).thenReturn(resposeDto);
 		resposeDto = vendorItemController.saveVendorItemDetails(vendorId, vendorItemDto).getBody();
 		assertEquals(200, resposeDto.getStatusCode());
@@ -59,9 +55,8 @@ public class VendorItemControllerTest {
 	
 	@Test
 	public void testGetVendorItemDetails() {
-		logger.info("Entered into GetVendorItemDetails method in controller");
 		Mockito.when(vendorItemService.getVendorItemDetails()).thenReturn(vendorItemList);
-		//resposeDto = vendorItemController.saveVendorItemDetails(vendorId, vendorItemDto).getBody();
-		assertEquals(200, resposeDto.getStatusCode());
+		vendorItemList = vendorItemController.getVendorItemDetails().getBody();
+		assertEquals(1, vendorItemList.size());
 	}	
 }
