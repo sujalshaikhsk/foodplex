@@ -15,8 +15,6 @@ import com.spiralforge.foodplex.dto.OrderItemDto;
 import com.spiralforge.foodplex.entity.OrderDetail;
 import com.spiralforge.foodplex.entity.OrderItem;
 import com.spiralforge.foodplex.entity.VendorItem;
-import com.spiralforge.foodplex.exception.InvalidOrderException;
-import com.spiralforge.foodplex.exception.InvalidUpiIdException;
 import com.spiralforge.foodplex.repository.OrderItemRepository;
 
 import lombok.extern.slf4j.Slf4j;

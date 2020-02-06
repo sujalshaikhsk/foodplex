@@ -1,5 +1,6 @@
 package com.spiralforge.foodplex.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "order_detail")
 @SequenceGenerator(name = "orderSequence", initialValue = 100100)
-public class OrderDetail {
+public class OrderDetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderSequence")
