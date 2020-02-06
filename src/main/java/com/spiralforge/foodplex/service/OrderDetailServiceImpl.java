@@ -19,8 +19,6 @@ import com.spiralforge.foodplex.repository.OrderDetailRepository;
 import com.spiralforge.foodplex.util.Constant;
 import com.spiralforge.foodplex.util.Utility;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
 
