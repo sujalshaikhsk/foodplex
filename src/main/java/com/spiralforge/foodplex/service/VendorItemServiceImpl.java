@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 import com.spiralforge.foodplex.dto.ResponseDto;
 import com.spiralforge.foodplex.dto.VendorItemDto;
 import com.spiralforge.foodplex.entity.Item;
+import com.spiralforge.foodplex.entity.User;
 import com.spiralforge.foodplex.entity.Vendor;
 import com.spiralforge.foodplex.entity.VendorItem;
+import com.spiralforge.foodplex.exception.UserNotFoundException;
 import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.repository.CategoryRepository;
 import com.spiralforge.foodplex.repository.ItemRepository;
+import com.spiralforge.foodplex.repository.UserRepository;
 import com.spiralforge.foodplex.repository.VendorItemRepository;
 import com.spiralforge.foodplex.repository.VendorRepository;
 import com.spiralforge.foodplex.util.ApiConstant;
@@ -37,6 +40,9 @@ public class VendorItemServiceImpl implements VendorItemService {
 
 	@Autowired
 	VendorRepository vendorRepository;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	CategoryRepository categoryRepository;
@@ -59,23 +65,36 @@ public class VendorItemServiceImpl implements VendorItemService {
 	 * @param vendorId		          	is the vendorId.
 	 * @param vendorItemDto 			is the vendor Item details.
 	 * @throws VendorNotFoundException 
+	 * @throws UserNotFoundException 
 	 */
 	@Override
-	public ResponseDto saveVendorItemDetails(Integer vendorId, VendorItemDto vendorItemDto) throws VendorNotFoundException {			
-		if (vendorId == null) {
-			logger.error("vendors not found");
-			throw new VendorNotFoundException(ApiConstant.VENDOR_NOT_FOUND_EXCEPTION);
+	public ResponseDto saveVendorItemDetails(Integer userId, VendorItemDto vendorItemDto) throws VendorNotFoundException, UserNotFoundException {			
+		if (userId == null) {
+			logger.error("User not found");
+			throw new UserNotFoundException(ApiConstant.INVALID_USER);
 		}
 		else {
 			VendorItem vendorItem = new VendorItem();
-
+			
+			Optional<User> user = userRepository.findById(userId);
+			
+			if(!user.isPresent()) {
+				logger.error("user not found");
+				throw new UserNotFoundException(ApiConstant.INVALID_USER);
+			}
+			
 			// get vendor entity
-			Vendor vendor = vendorRepository.getOne(vendorId);
+			Optional<Vendor> vendor = vendorRepository.findByUser(user.get());
+			
+			if(!vendor.isPresent()) {
+				logger.error("vendors not found");
+				throw new VendorNotFoundException(ApiConstant.VENDOR_NOT_FOUND_EXCEPTION);
+			}
 
 			// get item entity
 			Item item = itemRepository.getOne(vendorItemDto.getItemId());
 
-			vendorItem.setVendor(vendor);
+			vendorItem.setVendor(vendor.get());
 			vendorItem.setItem(item);
 			vendorItem.setPrice(vendorItemDto.getPrice());
 			
@@ -85,8 +104,7 @@ public class VendorItemServiceImpl implements VendorItemService {
 			responseDto.setMessage(ApiConstant.SUCCESS);
 			responseDto.setStatusCode(ApiConstant.SUCCESS_CODE);
 			return responseDto;
-		}
-		
+		}		
 	}
 	
 	

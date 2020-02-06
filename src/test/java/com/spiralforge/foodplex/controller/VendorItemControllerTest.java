@@ -12,11 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.spiralforge.foodplex.dto.ResponseDto;
 import com.spiralforge.foodplex.dto.VendorItemDto;
+import com.spiralforge.foodplex.exception.UserNotFoundException;
 import com.spiralforge.foodplex.exception.VendorNotFoundException;
 import com.spiralforge.foodplex.service.VendorItemService;
 import com.spiralforge.foodplex.util.ApiConstant;
@@ -48,7 +47,7 @@ public class VendorItemControllerTest {
 	}
 
 	@Test
-	public void testSaveVendorItemDetails() throws VendorNotFoundException {
+	public void testSaveVendorItemDetails() throws VendorNotFoundException, UserNotFoundException {
 		Mockito.when(vendorItemService.saveVendorItemDetails(vendorId, vendorItemDto)).thenReturn(resposeDto);
 		resposeDto = vendorItemController.saveVendorItemDetails(vendorId, vendorItemDto).getBody();
 		assertEquals(200, resposeDto.getStatusCode());
