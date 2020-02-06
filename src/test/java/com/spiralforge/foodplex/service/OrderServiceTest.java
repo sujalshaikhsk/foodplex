@@ -142,5 +142,17 @@ public class OrderServiceTest {
 		OrderDetail response = orderDetailServiceImpl.saveOrderDetail(user, orderRequestDto);
 		assertEquals(Integer.valueOf(1), response.getOrderDetailId());
 	}
+	
+	@Test
+	public void testSaveOrderDetailNegative() {
+		logger.info("Got the list of flights");
+		
+		OrderDetail saveOrderDetail = new OrderDetail();
+		saveOrderDetail.setOrderDetailId(1);
+		Mockito.when(orderDetailRepository.save(Mockito.any())).thenReturn(saveOrderDetail);
+		Mockito.when(orderItemService.saveOrderItems(orderDetail, orderList)).thenReturn(null);
+		OrderDetail response = orderDetailServiceImpl.saveOrderDetail(user, orderRequestDto);
+		assertNotNull(response);
+	}
 
 }

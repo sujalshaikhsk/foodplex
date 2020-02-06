@@ -32,25 +32,33 @@ import com.spiralforge.foodplex.entity.OrderItem;
 import com.spiralforge.foodplex.entity.User;
 import com.spiralforge.foodplex.entity.Vendor;
 import com.spiralforge.foodplex.entity.VendorItem;
+import com.spiralforge.foodplex.exception.InvalidUpiIdException;
+import com.spiralforge.foodplex.payment.PayTM;
+import com.spiralforge.foodplex.payment.Payment;
+import com.spiralforge.foodplex.payment.PaymentFactory;
+import com.spiralforge.foodplex.payment.PhonePe;
 import com.spiralforge.foodplex.repository.OrderDetailRepository;
-import com.spiralforge.foodplex.repository.OrderItemRepository;
+import com.spiralforge.foodplex.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class OrderItemServiceTest {
+public class UserServiceTest {
 
 	/**
 	 * The Constant log.
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(OrderItemServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceTest.class);
 
 	@InjectMocks
-	private OrderItemServiceImpl orderItemServiceImpl;
+	private UserServiceImpl userServiceImpl;
 
 	@Mock
-	private VendorItemService vendorItemService;
+	private OrderDetailService orderDetailService;
 
 	@Mock
-	private OrderItemRepository orderItemRepository;
+	private UserRepository userRepository;
+
+	@Mock
+	private PaymentFactory paymentFactory;
 
 	User user = new User();
 	LoginRequestDto loginRequestDto = new LoginRequestDto();
@@ -78,6 +86,7 @@ public class OrderItemServiceTest {
 		user.setPassword("sri");
 		user.setRole("USER");
 		user.setUserId(1);
+		user.setUpiId("sujal@upi");
 
 		loginRequestDto.setMobileNumber("1234568797");
 		loginRequestDto.setPassword("sri");
@@ -135,23 +144,73 @@ public class OrderItemServiceTest {
 	}
 
 	@Test
-	public void testSaveOrderItemsPositive() {
+	public void testSaveOrderDetailPositive() throws InvalidUpiIdException {
 		logger.info("Got the list of flights");
-		Integer vendorItemId=1;
-		List<OrderItem> ordItmList= new ArrayList<>();
-		Mockito.when(vendorItemService.getVendorItemById(vendorItemId)).thenReturn(Optional.of(vendorItem));
-		Mockito.when(orderItemRepository.saveAll(orderItemList)).thenReturn(orderItemList);
-		ordItmList = orderItemServiceImpl.saveOrderItems(orderDetail, orderList);
-		assertEquals(1, orderItemList.size());
+		Integer userId=1;
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+		Payment payment= new PayTM();
+		Mockito.when(paymentFactory.getPaymentMethod("PayTM")).thenReturn(payment);
+		Mockito.when(orderDetailService.saveOrderDetail(user, orderRequestDto)).thenReturn(orderDetail);
+		
+		OrderDetail result = userServiceImpl.placeOrder(userId, orderRequestDto);
+		assertEquals(Integer.valueOf(1), result.getOrderDetailId());
+	}
+	
+	@Test
+	public void testSaveOrderDetailNegative() throws InvalidUpiIdException {
+		logger.info("Got the list of flights");
+		Integer userId=1;
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.ofNullable(null));	
+		OrderDetail result = userServiceImpl.placeOrder(userId, orderRequestDto);
+		assertNull(result);
 	}
 
+	@Test(expected = InvalidUpiIdException.class)
+	public void testSaveOrderDetailForException() throws InvalidUpiIdException {
+		Integer userId=1;
+		orderRequestDto.setUpiId("else");
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+		Payment payment= new PhonePe();
+		Mockito.when(paymentFactory.getPaymentMethod("PayTM")).thenReturn(payment);
+		OrderDetail result = userServiceImpl.placeOrder(userId, orderRequestDto);
+	}
+	
 	@Test
-	public void testSaveOrderItemsNegative() {
-		Integer vendorItemId=1;
-		List<OrderItem> ordItmList= new ArrayList<>();
-		Mockito.when(vendorItemService.getVendorItemById(vendorItemId)).thenReturn(Optional.ofNullable(null));
-		ordItmList = orderItemServiceImpl.saveOrderItems(orderDetail, orderList);
-		assertNotNull(orderItemList);
+	public void testGetOrderPositive() {
+		Integer userId=1;
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+		Mockito.when(orderDetailService.getAllOrdersByUser(user)).thenReturn(orderDetailList);
+		
+		List<OrderDetail> result = userServiceImpl.getOrders(userId);
+		assertEquals(1, result.size());
+	}
+	
+	@Test
+	public void testGetOrderNegative() {
+		Integer userId=1;
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.ofNullable(null));
+		
+		List<OrderDetail> result = userServiceImpl.getOrders(userId);
+		assertNull(result);
+	}
+	
+	@Test
+	public void testGetVendorOrderPositive() {
+		Integer userId=1;
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+		Mockito.when(orderDetailService.getVendorOrders(user)).thenReturn(orderDetailList);
+		
+		List<OrderDetail> result = userServiceImpl.getVendorOrders(userId);
+		assertEquals(1, result.size());
+	}
+	
+	@Test
+	public void testGetVendorOrderNegative() {
+		Integer userId=1;
+		Mockito.when(userRepository.findById(userId)).thenReturn(Optional.ofNullable(null));
+		
+		List<OrderDetail> result = userServiceImpl.getVendorOrders(userId);
+		assertNull(result);
 	}
 
 }
