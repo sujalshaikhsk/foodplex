@@ -55,7 +55,6 @@ public class CategoryServiceImpl implements CategoryService {
 	 */
 	@Override
 	public List<ItemCategoryDto> getItemCategoryListByVendorId(Integer userId) {
-		logger.info("got the list of categories");
 		User user = userRepository.findByUserId(userId);
 		List<VendorItem> vendorItemList = vendorItemRepository.findVendorItemByUser(user);
 
@@ -78,7 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
 			itemCategoryDtos.add(itemCategoryDto);
 
 		});
-
+		logger.info("got the list of categories");
 		return itemCategoryDtos;
 	}
 
