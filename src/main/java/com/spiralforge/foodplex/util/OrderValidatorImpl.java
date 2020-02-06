@@ -62,13 +62,11 @@ public class OrderValidatorImpl implements OrderValidator<Integer, OrderRequestD
 	private boolean validateItem(List<OrderItemDto> orderList) {
 		logger.info("inside validate items");
 
-		Optional<Boolean> optionalOrderFlag = orderList.stream().map(order -> {
+		return orderList.stream().map(order -> {
 			if (!vendorItemService.getVendorItemById(order.getVendorItemId()).isPresent())
 				return true;
 			return false;
-		}).filter(itemStatus->itemStatus.equals(true)).findAny();
-		
-		return (optionalOrderFlag.isPresent() && optionalOrderFlag.get());	
+		}).filter(itemStatus->itemStatus.equals(true)).findAny().get();	
 	}
 
 }
