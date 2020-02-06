@@ -19,6 +19,8 @@ import com.spiralforge.foodplex.repository.OrderDetailRepository;
 import com.spiralforge.foodplex.util.Constant;
 import com.spiralforge.foodplex.util.Utility;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
 
@@ -43,7 +45,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	@Override
 	public OrderDetail saveOrderDetail(User user, OrderRequestDto orderRequestDto) {
 		logger.info("inside order place method");
-		OrderDetail orderDetail1=null; 
 		OrderDetail orderDetail = new OrderDetail();
 		BeanUtils.copyProperties(orderRequestDto, orderDetail);
 		orderDetail.setTotalPrice(getTotalItemPrice(orderRequestDto));
@@ -51,7 +52,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 		orderDetail.setStatus(Constant.CONFIRMED_STATUS);
 		orderDetail.setOrderDate(LocalDateTime.now());
 		orderDetail.setUser(user);
-		orderDetail1 = orderDetailRepository.save(orderDetail);
+		orderDetail = orderDetailRepository.save(orderDetail);
 
 		if (!Objects.isNull(orderDetail))
 			orderItemService.saveOrderItems(orderDetail, orderRequestDto.getOrderList());
@@ -67,8 +68,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	 * @return total price
 	 */
 	private Double getTotalItemPrice(OrderRequestDto orderRequestDto) {
-		return orderRequestDto.getOrderList().stream()
-				.mapToDouble(ordeItem -> Utility.getTotalPrice(ordeItem.getQuantity(), ordeItem.getPrice())).sum();
+		return orderRequestDto.getOrderList().stream().mapToDouble(ordeItem ->Utility.getTotalPrice(ordeItem.getQuantity(), ordeItem.getPrice())).sum();
 	}
 
 	/**
